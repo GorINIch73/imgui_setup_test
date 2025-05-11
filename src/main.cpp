@@ -27,6 +27,7 @@ int main() {
 
 
         glfwPollEvents();
+
         gui.Render();
     }
 

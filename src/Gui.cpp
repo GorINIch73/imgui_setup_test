@@ -50,9 +50,25 @@ void Gui::Init(GLFWwindow* window) {
 }
 
 void Gui::Render() {
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
+
+
+
+    static auto last_time = std::chrono::high_resolution_clock::now();
+    auto current_time = std::chrono::high_resolution_clock::now();
+    double elapsed = std::chrono::duration<double>(current_time - last_time).count();
+
+    if (elapsed < 1.0 / 30.0) {  // 30 FPS для ImGui
+        return;
+    }
+
+    last_time = current_time;
+
     ImGui::NewFrame();
+
+	
 
     ShowMainMenu();
     if (db.IsOpen()) ShowDatabaseEditor();
@@ -60,10 +76,21 @@ void Gui::Render() {
     if (showAbout) ShowAbout();
     if (showFileDialog) ShowFileDialog();
 
+	static double fps = 0.0;
+	static auto last_fps_time = std::chrono::high_resolution_clock::now();
+	auto now = std::chrono::high_resolution_clock::now();
+	fps = 0.9 * fps + 0.1 / std::chrono::duration<double>(now - last_fps_time).count();
+	last_fps_time = now;
+	ImGui::Text("FPS: %.1f", fps);
+
+//	ImGui::ShowMetricsWindow();  // Показывает нагрузку (количество окон, вершины и т. д.)
+
     ImGui::Render();
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     glfwSwapBuffers(window);  // Используем сохранённое окно
+
+
 }
 
 
