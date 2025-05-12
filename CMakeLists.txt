@@ -26,7 +26,11 @@ ExternalProject_Add(
 
 # Указываем пути к собранной библиотеке
 set(LIBHARU_INCLUDE_DIR ${CMAKE_BINARY_DIR}/libharu-install/include)
+if (WIN32)
 set(LIBHARU_LIBRARY ${CMAKE_BINARY_DIR}/libharu-install/lib/libhpdf.dll.a)
+else()
+set(LIBHARU_LIBRARY ${CMAKE_BINARY_DIR}/libharu-install/lib/libhpdf.so)
+endif()
 
 
 
@@ -97,7 +101,7 @@ add_executable(imgui_setup
 
 # Подключаем зависимости
 target_include_directories(imgui_setup  PRIVATE
-    ${CMAKE_SOURCE_DIR}  #наши заголовки
+    ${CMAKE_SOURCE_DIR}/stc  #наши заголовки
     ${IMGUI_DIR}/
     ${IMGUI_DIR}/backends
     ${OPENGL_INCLUDE_DIR}    
