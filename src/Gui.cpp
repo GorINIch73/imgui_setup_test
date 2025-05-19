@@ -77,6 +77,7 @@ void Gui::Render() {
 
     last_time = current_time;
 
+    // рисуем
     ImGui::NewFrame();
 
     ShowMainMenu();
@@ -149,6 +150,8 @@ void Gui::ShowMainMenu() {
                 ImGui::EndMenu();
             }
             if (ImGui::MenuItem("Выход")) {
+                if (db.IsOpen())
+                    db.Close();
                 glfwSetWindowShouldClose(window, true);
             }
             ImGui::EndMenu();
@@ -228,8 +231,8 @@ void Gui::ShowFileDialog() {
             std::string filePath =
                 ImGuiFileDialog::Instance()->GetCurrentPath();
 
-            std::cout << "Выбран файл имя: " << filePathName << std::endl;
-            std::cout << "Выбран файл: " << filePath << std::endl;
+            // std::cout << "Выбран файл имя: " << filePathName << std::endl;
+            // std::cout << "Выбран файл: " << filePath << std::endl;
 
             // Пример: загрузка базы данных
             db.Open(filePathName);
